@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822099798682",
+    "project_id": "salasudp",
+    "storage_bucket": "salasudp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822099798682:android:c5fc00139c85ef661e0d23",
+        "android_client_info": {
+          "package_name": "com.example.salas_udp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOs8JiDPE0fqQcaCwJI8OU6_sfp5WY2jY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
