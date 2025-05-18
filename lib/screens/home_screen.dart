@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../services/home_service.dart';
+import '../services/home/home_service.dart';
 import '../widgets/base_scaffold.dart';
 
 class HomeScreen extends StatelessWidget {

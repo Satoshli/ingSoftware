@@ -1,14 +1,14 @@
-class Personasudp {
- final String correo;
+class Docentes {
+  final String correo;
   final String rol;
 
-  Personasudp({
-   required this.correo,
+  Docentes({
+    required this.correo,
     required this.rol,
   });
 
-  factory Personasudp.fromMap(Map<String, dynamic> data, String id) {
-    return Personasudp(
+  factory Docentes.fromMap(Map<String, dynamic> data, String id) {
+    return Docentes(
       correo: data['correo'],
       rol: data['rol'],
     );

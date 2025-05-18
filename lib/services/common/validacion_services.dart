@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../models/validacion_model.dart';
+import '../../../models/validacion_model.dart';
 
 class ValidacionService {
   final _db = FirebaseFirestore.instance;

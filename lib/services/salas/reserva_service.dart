@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../models/reserva_model.dart';
+import '../../../models/reserva_model.dart';
 
 class ReservaService {
   final _db = FirebaseFirestore.instance;

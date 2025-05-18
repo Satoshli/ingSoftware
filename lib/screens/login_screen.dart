@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:salas_udp/services/login_service.dart';
+import 'package:salas_udp/services/common/login_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
