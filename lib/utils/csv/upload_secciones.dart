@@ -9,7 +9,9 @@ Future<void> uploadCSVSecciones(BuildContext context) async {
     lines = await pickAndReadCSV();
   } catch (e) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al leer el archivo: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al leer el archivo: $e')),
+      );
     }
     return;
   }
@@ -25,7 +27,9 @@ Future<void> uploadCSVSecciones(BuildContext context) async {
   for (var i = 1; i < lines.length; i++) {
     try {
       final values = lines[i].split(',').map((v) => v.trim()).toList();
-      if (values.length != headers.length) throw FormatException('Línea ${i + 1} mal formada');
+      if (values.length != headers.length) {
+        throw FormatException('Línea ${i + 1} mal formada');
+      }
 
       final data = <String, String>{};
       for (int j = 0; j < headers.length; j++) {
@@ -34,13 +38,22 @@ Future<void> uploadCSVSecciones(BuildContext context) async {
 
       final cursoId = data['cursoId'] ?? '';
       final seccionId = data['id'] ?? '';
+
+     
       final seccion = Seccion(
         cursoId: cursoId,
         id: seccionId,
         nombreprofe: data['nombre_profesor'] ?? '',
+       
       );
 
-      await db.collection('cursos').doc(cursoId).collection('secciones').doc(seccionId).set(seccion.toMap());
+      await db
+          .collection('cursos')
+          .doc(cursoId)
+          .collection('secciones')
+          .doc(seccionId)
+          .set(seccion.toMap());
+
       successCount++;
     } catch (e) {
       errorCount++;
@@ -49,8 +62,10 @@ Future<void> uploadCSVSecciones(BuildContext context) async {
   }
 
   if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Secciones subidas: $successCount. Errores: $errorCount.'),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Secciones subidas: $successCount. Errores: $errorCount.'),
+      ),
+    );
   }
 }

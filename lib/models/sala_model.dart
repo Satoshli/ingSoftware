@@ -1,3 +1,4 @@
+
 class Sala {
   final String id;
   final String nombre;
@@ -19,16 +20,16 @@ class Sala {
     this.motivoBloqueo,
   });
 
-  factory Sala.fromMap(Map<String, dynamic> data, String id) {
+  factory Sala.fromMap(Map<String, dynamic> map, String id) {
     return Sala(
       id: id,
-      nombre: data['nombre'],
-      piso: data['piso'],
-      edificio: data['edificio'],
-      nrosala: data['nrosala'],
-      capacidad: data['capacidad'],
-      bloqueada: data['bloqueada'],
-      motivoBloqueo: data['motivoBloqueo'],
+      nombre: map['nombre'] ?? 'Sin nombre',
+      edificio: map['edificio'] ?? '',
+      piso: map['piso'] ?? 0,
+      nrosala: map['nrosala'] ?? '',
+      capacidad: map['capacidad'] ?? 0,
+      bloqueada: map['bloqueada'] ?? false,
+      motivoBloqueo: map['motivoBloqueo'],
     );
   }
 

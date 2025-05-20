@@ -1,67 +1,67 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../models/sala_model.dart';
-import '../../../models/horario_model.dart';
+import '../../models/sala_model.dart';
+
+
 
 class SalaService {
-  final _db = FirebaseFirestore.instance;
-  final String _collection = 'salas';
-  final String _horariosCollection = 'horarios';
-  FirebaseFirestore get db => _db;
+  final CollectionReference salasRef =
+      FirebaseFirestore.instance.collection('salas');
 
-  /// Crear sala usando el ID que ya viene en el modelo (por ejemplo desde CSV)
+  FirebaseFirestore get db => FirebaseFirestore.instance;
+
+  // Crear sala
   Future<void> crearSala(Sala sala) async {
-    final salaRef = _db.collection(_collection).doc(sala.id);
-    await salaRef.set(sala.toMap());
+    await salasRef.doc(sala.id).set(sala.toMap());
   }
 
-  /// Obtener horarios de una sala específica
-  Future<List<Horario>> obtenerHorariosPorSala(String salaId) async {
-    final snapshot = await _db
-        .collection(_horariosCollection)
-        .where('salaId', isEqualTo: salaId)
-        .get();
+  // Actualizar sala
+  Future<void> actualizarSala(Sala sala) async {
+    await salasRef.doc(sala.id).update(sala.toMap());
+  }
 
-    return snapshot.docs
-        .map((doc) => Horario.fromMap(doc.data(), doc.id))
+  // Eliminar sala
+  Future<void> eliminarSala(String id) async {
+    await salasRef.doc(id).delete();
+  }
+
+  // Obtener sala por ID
+  Future<Sala?> getSalaById(String id) async {
+    final doc = await salasRef.doc(id).get();
+    if (!doc.exists) return null;
+
+    final data = doc.data() as Map<String, dynamic>;
+    return Sala.fromMap(data, doc.id);
+  }
+
+  // Obtener todas las salas
+  Future<List<Sala>> getTodasLasSalas() async {
+    final query = await salasRef.get();
+    return query.docs
+        .map((doc) => Sala.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
   }
 
-  /// Obtener horarios de una sala por día
-  Future<List<Horario>> obtenerHorariosPorSalaYDia(String salaId, int dia) async {
-    final snapshot = await _db
-        .collection(_horariosCollection)
-        .where('salaId', isEqualTo: salaId)
-        .where('dia', isEqualTo: dia)
-        .get();
-
-    return snapshot.docs
-        .map((doc) => Horario.fromMap(doc.data(), doc.id))
+  // Obtener salas bloqueadas
+  Future<List<Sala>> getSalasBloqueadas() async {
+    final query = await salasRef.where('bloqueada', isEqualTo: true).get();
+    return query.docs
+        .map((doc) => Sala.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
   }
 
-  /// Obtener bloques libres por sala y bloque específico
-  Future<List<Horario>> obtenerBloquesLibresPorSalaYBloque(String salaId, int bloque) async {
-    final snapshot = await _db
-        .collection(_horariosCollection)
-        .where('salaId', isEqualTo: salaId)
-        .where('bloque', isEqualTo: bloque)
-        .where('estado', isEqualTo: 'libre')
-        .get();
-
-    return snapshot.docs
-        .map((doc) => Horario.fromMap(doc.data(), doc.id))
+  // Obtener salas por edificio
+  Future<List<Sala>> getSalasPorEdificio(String edificio) async {
+    final query = await salasRef.where('edificio', isEqualTo: edificio).get();
+    return query.docs
+        .map((doc) => Sala.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
   }
 
-  /// Obtener salas sin clases por bloque (todas las salas con bloque libre)
-  Future<List<String>> obtenerSalasSinClasePorBloque(int bloque) async {
-    final snapshot = await _db
-        .collection(_horariosCollection)
-        .where('bloque', isEqualTo: bloque)
-        .where('estado', isEqualTo: 'libre')
-        .get();
-
-    final salas = snapshot.docs.map((doc) => doc['salaId'] as String).toSet().toList();
-    return salas;
+  // Obtener salas por piso
+  Future<List<Sala>> getSalasPorPiso(int piso) async {
+    final query = await salasRef.where('piso', isEqualTo: piso).get();
+    return query.docs
+        .map((doc) => Sala.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+        .toList();
   }
 }

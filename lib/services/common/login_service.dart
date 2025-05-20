@@ -39,34 +39,31 @@ class LoginService {
         return LoginResult.invalidEmail;
       }
 
-   // Buscar en personas_udp (opcional)
-final personaQuery = await _firestore
-    .collection('PersonasUDP')
-    .where('correo', isEqualTo: email)
-    .limit(1)
-    .get();
+      final userDocRef = _firestore.collection('usuarios').doc(user.uid);
+      final userSnapshot = await userDocRef.get();
 
-String rol = 'estudiante'; // valor por defecto
-String nombre = user.displayName ?? 'Sin nombre';
+      // Datos base
+      String rol = 'estudiante'; // Rol por defecto
+      String nombre = user.displayName ?? 'Sin nombre';
 
-if (personaQuery.docs.isNotEmpty) {
-  final persona = personaQuery.docs.first.data();
-  rol = persona['rol'] ?? rol;
-  nombre = persona['nombre'] ?? nombre;
-}
+      if (userSnapshot.exists) {
+        // Si el usuario ya existe, mantener su rol actual
+        final data = userSnapshot.data();
+        if (data != null && data.containsKey('rol')) {
+          rol = data['rol'] ?? 'estudiante';
+        }
+      }
 
-// ✅ Crear/actualizar documento en usuarios
-final userDoc = _firestore.collection('usuarios').doc(user.uid);
-await userDoc.set({
-  'id': user.uid,
-  'nombre': nombre,
-  'correo': email,
-  'rol': rol,
-  'activo': true,
-  'photoURL': user.photoURL,
-  'createdAt': FieldValue.serverTimestamp(),
-}, SetOptions(merge: true));
-
+      // Crear o actualizar el documento sin sobreescribir datos previos
+      await userDocRef.set({
+        'id': user.uid,
+        'nombre': nombre,
+        'correo': email,
+        'rol': rol,
+        'activo': true,
+        'photoURL': user.photoURL,
+        'createdAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
 
       return LoginResult.success;
     } catch (e) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/base_scaffold.dart';
-import '../../widgets/csv_buttons/docentes_button.dart' as docentes_btn;
 import '../../widgets/csv_buttons/salas_button.dart' as salas_btn;
 import '../../widgets/csv_buttons/horarios_button.dart' as horarios_btn;
 import '../../widgets/csv_buttons/cursos_button.dart' as cursos_btn;
@@ -12,9 +11,19 @@ class AdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      currentIndex: 0,
+      currentIndex: 2, // Asume que index 2 es el Admin
       onTap: (index) {
-        Navigator.popUntil(context, ModalRoute.withName('/'));
+        switch (index) {
+          case 0:
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+            break;
+          case 1:
+            Navigator.pushNamedAndRemoveUntil(context, '/salas', (route) => false);
+            break;
+          case 2:
+            // Ya estamos en Admin, no hacer nada
+            break;
+        }
       },
       onLogout: () {
         Navigator.pushReplacementNamed(context, '/login');
@@ -24,23 +33,36 @@ class AdminScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Panel de administración',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16),
-            docentes_btn.UploadCSVDocentesButton(label: 'Subir CSV de docentes'),
-            SizedBox(height: 16),
-            salas_btn.UploadCSVSalasButton(label: 'Subir CSV de salas'),
-            SizedBox(height: 16),
-            horarios_btn.UploadCSVHorariosButton(label: 'Subir CSV de horarios'),
-            SizedBox(height: 16),
-            cursos_btn.UploadCSVCursosButton(label: 'Subir CSV de cursos'),
-            SizedBox(height: 16),
-            SizedBox(height: 16),
-            secciones_btn.UploadCSVSeccionesButton(label: 'Subir CSV de secciones'),
-            SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Panel de administración',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: 250,
+                  child: salas_btn.UploadCSVSalasButton(label: 'Subir CSV de salas'),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: 250,
+                  child: horarios_btn.UploadCSVHorariosButton(label: 'Subir CSV de horarios'),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: 250,
+                  child: cursos_btn.UploadCSVCursosButton(label: 'Subir CSV de cursos'),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: 250,
+                  child: secciones_btn.UploadCSVSeccionesButton(label: 'Subir CSV de secciones'),
+                ),
+              ],
+            )
           ],
         ),
       ),

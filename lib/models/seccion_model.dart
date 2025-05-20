@@ -1,8 +1,7 @@
 class Seccion {
-  final String id; // ID del documento/ numero de sección
+  final String id; // ID del documento (número de sección)
   final String nombreprofe;
   final String cursoId;
-  
 
   Seccion({
     required this.id,
@@ -10,11 +9,11 @@ class Seccion {
     required this.cursoId,
   });
 
-  factory Seccion.fromMap(Map<String, dynamic> data, String id, String cursoId) {
+  factory Seccion.fromMap(Map<String, dynamic> data, String id) {
     return Seccion(
       id: id,
-      nombreprofe: data['nombre_profesor'],
-      cursoId: cursoId,
+      nombreprofe: data['nombre_profesor'] ?? '',
+      cursoId: data['cursoId'] ?? '',
     );
   }
 

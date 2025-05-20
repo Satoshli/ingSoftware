@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart'; // Asegúrate de tener este import
 import 'config/firebase_options.dart';
-import 'utils/routes.dart'; // ← Asegúrate de importar esto
+import 'utils/routes.dart';
+import 'providers/clases_provider.dart'; // Importa tu provider
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HorarioProvider()),
+   
+        // Aquí puedes agregar otros providers si los tienes
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,8 +35,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/', // ← Esto usa las rutas registradas
-      routes: AppRoutes.routes, // ← Aquí se usan las rutas de tu archivo
+      initialRoute: '/',
+      routes: AppRoutes.routes,
     );
   }
 }
